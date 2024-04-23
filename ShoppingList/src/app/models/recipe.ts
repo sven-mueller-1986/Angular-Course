@@ -1,11 +1,11 @@
-export class Recipe {
-  public name: string;
-  public description: string|undefined;
-  public imagePath: string|undefined;
+import { Ingredient } from "./ingredient";
 
-  constructor(name:string, description:string|undefined, imagePath: string|undefined) {
-    this.name = name;
-    this.description = description;
-    this.imagePath = imagePath;
-  }
+export class Recipe {
+  constructor(
+    public id: number|undefined,
+    public name:string,
+    public description:string|undefined,
+    public imagePath: string|undefined,
+    public ingredients: Ingredient[] = []
+  ) { }
 }
