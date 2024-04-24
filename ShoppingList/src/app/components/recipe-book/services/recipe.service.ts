@@ -40,10 +40,12 @@ export class RecipeService {
 
   constructor() { }
 
-  public recipeSelected: EventEmitter<Recipe> = new EventEmitter();
-
-  public getRecipes() {
+  public getRecipes(): Recipe[] {
     return this.recipes.slice();
+  }
+
+  public getRecipe(id: number): Recipe | undefined {
+    return this.recipes.find(r => r.id === id);
   }
 
   public addRecipe(recipe: Recipe) {

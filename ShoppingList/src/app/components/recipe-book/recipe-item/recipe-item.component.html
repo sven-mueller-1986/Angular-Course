@@ -1,4 +1,7 @@
-<a href="#" class="list-group-item list-group-item-action active" [ngClass]="{'active': isActive}" [attr.aria-current]="isActive" (click)="onRecipeClicked()">
+<a
+  class="list-group-item list-group-item-action pointer"
+  [routerLink]="['/recipe', recipe?.id]"
+  routerLinkActive="active">
   <div class="d-flex w-100 justify-content-between align-items-center">
     <div class="me-2 w-75">
       <h4 class="list-group-item-heading">{{ recipe?.name }}</h4>
