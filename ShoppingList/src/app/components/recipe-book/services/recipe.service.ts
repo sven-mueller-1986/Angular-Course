@@ -1,6 +1,7 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Recipe } from '../../../models/recipe';
 import { Ingredient } from '../../../models/ingredient';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,17 +39,56 @@ export class RecipeService {
       ])
   ];
 
+  public recipesChange: Subject<Recipe[]> = new Subject();
+
   constructor() { }
 
   public getRecipes(): Recipe[] {
     return this.recipes.slice();
   }
 
-  public getRecipe(id: number): Recipe | undefined {
-    return this.recipes.find(r => r.id === id);
+  public getRecipe(id: number | undefined): Recipe | undefined {
+    const recipe = this.recipes.find(r => r.id === id);
+
+    if(!recipe)
+      return undefined;
+
+    return new Recipe(recipe.id, recipe.name, recipe.description, recipe.imagePath, recipe.ingredients);
   }
 
-  public addRecipe(recipe: Recipe) {
+  public updsertRecipe(name: string, description: string, imagePath: string, ingredients: Ingredient[], id?: number): number {
+    const existingRecipe = this.recipes.find(r => r.id === id);
+    const newId: number = Number.isNaN(id) ? this.recipes.length + 1 : id!;
 
+    if(existingRecipe) {
+      existingRecipe.name = name;
+      existingRecipe.description = description;
+      existingRecipe.imagePath = imagePath;
+      existingRecipe.ingredients = ingredients;
+    }
+    else {
+      this.recipes.push(new Recipe(
+        newId,
+        name,
+        description,
+        imagePath,
+        ingredients
+      ));
+    }
+
+    this.recipesChange.next(this.getRecipes());
+    return newId;
+  }
+
+  public deleteRecipe(id: number) {
+    const existingRecipe = this.recipes.find(r => r.id === id);
+
+    if(!existingRecipe)
+      return;
+
+    const index = this.recipes.indexOf(existingRecipe);
+    this.recipes.splice(index, 1);
+
+    this.recipesChange.next(this.getRecipes());
   }
 }

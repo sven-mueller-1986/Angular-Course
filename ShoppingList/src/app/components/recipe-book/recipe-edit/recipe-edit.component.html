@@ -1,2 +1,121 @@
-<p *ngIf="newMode">new Mode</p>
-<p *ngIf="!newMode">edit Mode</p>
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+      <div class="row mt-2">
+        <div class="col-12">
+          <h4>{{ newMode ? 'New Recipe' : 'Edit Recipe' }}</h4>
+          <hr>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-group has-validation">
+            <label for="imagePath">Image URL</label>
+            <input class="form-control"
+              type="text"
+              #imagePath
+              id="imagePath"
+              formControlName="imagePath"
+              [class.is-invalid]="isControlInvalid('imagePath')">
+            <div class="invalid-feedback">Image is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <img [src]="imagePath.value" alt="image preview" class="img-responsive" style="max-height: 200px;">
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control"
+              type="text"
+              id="name"
+              formControlName="name"
+              [class.is-invalid]="isControlInvalid('name')">
+            <div class="invalid-feedback">Name is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control"
+              type="text"
+              id="description"
+              formControlName="description"
+              rows="6"
+              [class.is-invalid]="isControlInvalid('description')">
+            </textarea>
+            <div class="invalid-feedback">Description is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <h5>Ingredients</h5>
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-6">
+              <span>Name</span>
+            </div>
+            <div class="col-2 d-flex justify-content-center">
+              <span>Amount</span>
+            </div>
+            <div class="col-3 d-flex justify-content-center">
+              <span>Unit</span>
+            </div>
+            <div class="col-1">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12" formArrayName="ingredients">
+          <div
+            class="row mb-2"
+            *ngFor="let ingredientControl of ingredientControls; let i = index"
+            [formGroupName]="i">
+
+            <div class="col-6">
+              <input class="form-control" type="text" formControlName="name" [class.is-invalid]="isIngredientControlInvalid(i, 'name')">
+              <div class="invalid-feedback">Name is required</div>
+            </div>
+            <div class="col-2">
+              <input class="form-control" type="number" formControlName="amount" [class.is-invalid]="isIngredientControlInvalid(i, 'amount')">
+              <div class="invalid-feedback">A positive number is required</div>
+            </div>
+            <div class="col-3">
+              <input class="form-control" type="text" formControlName="unit" [class.is-invalid]="isIngredientControlInvalid(i, 'unit')">
+              <div class="invalid-feedback">Unit is required</div>
+            </div>
+            <div class="col-1 d-flex justify-content-end">
+              <button type="button" class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12">
+          <button type="button" class="btn btn-success w-100" (click)="onAddIngredient()">+</button>
+        </div>
+      </div>
+      <hr>
+      <div class="row mt-3">
+        <div class="col-12 d-flex justify-content-between">
+          <button type="submit" class="btn btn-success" [disabled]="recipeForm.invalid">Save</button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

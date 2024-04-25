@@ -8,5 +8,5 @@ import { Recipe } from '../../../models/recipe';
   styleUrl: './recipe-item.component.scss'
 })
 export class RecipeItemComponent {
-  @Input() recipe: Recipe | undefined;
+  @Input() recipe?: Recipe;
 }
