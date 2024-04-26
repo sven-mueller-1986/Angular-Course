@@ -13,7 +13,7 @@ export class RecipeEditComponent implements OnInit{
 
   private amountRegex = /^[1-9]+[0-9]*$/;
 
-  public id?: number;
+  public id?: string;
   public newMode: boolean = true;
 
   public recipeForm: FormGroup = new FormGroup({});
@@ -27,7 +27,7 @@ export class RecipeEditComponent implements OnInit{
   ngOnInit(): void {
     this.route.params.subscribe(
       (params: Params) => {
-        this.id = +params['id'];
+        this.id = params['id'];
         this.newMode = Number.isNaN(this.id);
         this.initForm();
       }
@@ -36,7 +36,12 @@ export class RecipeEditComponent implements OnInit{
 
   public onSubmit() {
     const values = this.recipeForm.value;
-    this.id = this.recipeService.updsertRecipe(values.name, values.description, values.imagePath, values.ingredients, this.id);
+    if(this.newMode) {
+      this.recipeService.createRecipe(values.name, values.description, values.imagePath, values.ingredients);
+    }
+    else if(this.id) {
+      this.recipeService.updateRecipe(this.id, values.name, values.description, values.imagePath, values.ingredients);
+    }
 
     this.router.navigate(["/recipe", this.id]);
   }
@@ -68,8 +73,8 @@ export class RecipeEditComponent implements OnInit{
     (<FormArray>this.recipeForm.get("ingredients")).removeAt(index);
   }
 
-  private initForm() {
-      const recipe = this.recipeService.getRecipe(this.id);
+  private async initForm() {
+      const recipe = await this.recipeService.getRecipe(this.id);
       const recipeName = recipe?.name ?? "";
       const recipeImagePath = recipe?.imagePath ?? "";
       const recipeDescription = recipe?.description ?? "";

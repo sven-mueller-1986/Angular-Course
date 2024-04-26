@@ -14,6 +14,8 @@ import { DropdownDirective } from './directives/dropdown.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { RecipeStartComponent } from './components/recipe-book/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './components/recipe-book/recipe-edit/recipe-edit.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { CorsHttpInterceptor } from './interceptors/cors.http-interceptor';
 
 @NgModule({
   declarations: [
@@ -33,9 +35,16 @@ import { RecipeEditComponent } from './components/recipe-book/recipe-edit/recipe
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CorsHttpInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
