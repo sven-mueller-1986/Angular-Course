@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  ShoppingList.DB:
+    image: postgres
+
+  ShoppingList.API:
+    image: ${DOCKER_REGISTRY-}shoppinglistapi
+    build:
+      context: .
+      dockerfile: ShoppingList.Api/Dockerfile
+
+volumes:
+  postgres_shopping:
