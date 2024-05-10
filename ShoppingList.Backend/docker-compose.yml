@@ -10,5 +10,23 @@ services:
       context: .
       dockerfile: ShoppingList.Api/Dockerfile
 
+  Identity.DB:
+    image: postgres
+
+  ShoppingList.Identity:
+    image: ${DOCKER_REGISTRY-}shoppinglistidentity
+    build:
+      context: .
+      dockerfile: ShoppingList.Identity/Dockerfile
+
+  ShoppingList.Bff:
+    image: ${DOCKER_REGISTRY-}shoppinglistbff
+    build:
+      context: .
+      dockerfile: ShoppingList.Bff/Dockerfile
+
 volumes:
   postgres_shopping:
+  postgres_identity:
+
+

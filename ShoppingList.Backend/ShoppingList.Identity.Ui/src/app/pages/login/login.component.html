@@ -1,0 +1,42 @@
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="w-100 mt-5 row d-flex justify-content-center">
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h3>Log In</h3>
+          <hr>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+            <div class="form-group">
+              <label for="email">E-Mail</label>
+              <input type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                ngModel
+                required email
+                [class.is-invalid]="isControlInvalid('email', loginForm)">
+                <div class="invalid-feedback">E-Mail is required</div>
+            </div>
+            <div class="form-group mt-3">
+              <label for="password">Password</label>
+              <input type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                ngModel
+                required minlength="6"
+                [class.is-invalid]="isControlInvalid('password', loginForm)">
+                <div class="invalid-feedback">Password is required with a minimum length of 6 characters.</div>
+            </div>
+            <div class="w-100 d-flex justify-content-between mt-3">
+              <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">{{ isLoginMode ? 'Log In' : 'Sign Up' }}</button>
+              <button type="button" class="btn btn-light" (click)="onSwitchMode()">Switch to {{ isLoginMode ? 'Signup' : 'Login' }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

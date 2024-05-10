@@ -8,12 +8,16 @@ public class ShoppingList : ICarterModule
         {
             var shoppingLists = await database.ShoppingLists.ToListAsync();
 
+            await TaskHelper.DelayRandom();
+
             return Results.Ok(shoppingLists.Adapt<List<ShoppingListDto>>());
         });
 
         app.MapGet("/api/shopping-list/{id}", async (Guid id, IAppDatabaseContext database) =>
         {
             var shoppingList = await database.ShoppingLists.Include(x => x.Ingredients).FirstOrDefaultAsync(x => x.Id == id);
+
+            await TaskHelper.DelayRandom();
 
             if (shoppingList is null)
                 return Results.NotFound();
@@ -27,6 +31,8 @@ public class ShoppingList : ICarterModule
 
             var createdShoppingList = await database.ShoppingLists.AddAsync(shoppingList);
             await database.SaveChangesAsync();
+
+            await TaskHelper.DelayRandom();
 
             return Results.Created($"/api/shopping-list/{createdShoppingList.Entity.Id}", createdShoppingList.Entity.Adapt<ShoppingListDto>());
         });
@@ -43,12 +49,16 @@ public class ShoppingList : ICarterModule
 
             await database.SaveChangesAsync();
 
+            await TaskHelper.DelayRandom();
+
             return Results.Ok();
         });
 
         app.MapDelete("/api/shopping-list/{id}", async (Guid id, IAppDatabaseContext database) =>
         {
             var shoppingList = await database.ShoppingLists.Include(x => x.Ingredients).FirstOrDefaultAsync(x => x.Id == id);
+
+            await TaskHelper.DelayRandom();
 
             if (shoppingList is null)
                 return Results.NotFound();

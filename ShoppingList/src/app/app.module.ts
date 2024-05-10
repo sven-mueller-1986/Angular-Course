@@ -14,8 +14,10 @@ import { DropdownDirective } from './directives/dropdown.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { RecipeStartComponent } from './components/recipe-book/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './components/recipe-book/recipe-edit/recipe-edit.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { CorsHttpInterceptor } from './interceptors/cors.http-interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { AccountComponent } from './components/core/account/account.component';
+import { LoadingSpinnerComponent } from './components/core/loading-spinner/loading-spinner.component';
+import { LandingComponent } from './components/core/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,10 @@ import { CorsHttpInterceptor } from './interceptors/cors.http-interceptor';
     RecipeWrapperComponent,
     DropdownDirective,
     RecipeStartComponent,
-    RecipeEditComponent
+    RecipeEditComponent,
+    AccountComponent,
+    LoadingSpinnerComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,
@@ -39,11 +44,11 @@ import { CorsHttpInterceptor } from './interceptors/cors.http-interceptor';
     HttpClientModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CorsHttpInterceptor,
-      multi: true
-    }
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CorsHttpInterceptor,
+    //   multi: true
+    // }
   ],
   bootstrap: [AppComponent]
 })

@@ -20,6 +20,14 @@ export class RequestService {
     return firstValueFrom(this.http.post<TResponse>(this.createUrl(endpoint), payload));
   }
 
+  public put<TRequest, TResponse>(endpoint: string, id: string, payload: TRequest): Promise<TResponse> {
+    return firstValueFrom(this.http.put<TResponse>(this.createUrl(endpoint, id), payload));
+  }
+
+  public delete<TResponse>(endpoint: string, id: string): Promise<TResponse> {
+    return firstValueFrom(this.http.delete<TResponse>(this.createUrl(endpoint, id)));
+  }
+
   private createUrl(endpoint: string, id?: string) {
     return `${this.baseUrl}/${endpoint}${id ? `/${id}` : ''}`;
   }

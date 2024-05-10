@@ -15,6 +15,7 @@ export class RecipeEditComponent implements OnInit{
 
   public id?: string;
   public newMode: boolean = true;
+  public isLoading: boolean = true;
 
   public recipeForm: FormGroup = new FormGroup({});
 
@@ -26,18 +27,21 @@ export class RecipeEditComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.params.subscribe(
-      (params: Params) => {
+      async (params: Params) => {
+        this.isLoading = true;
         this.id = params['id'];
-        this.newMode = Number.isNaN(this.id);
-        this.initForm();
+        this.newMode = this.id === undefined;
+        await this.initForm();
+        this.isLoading = false;
       }
     );
   }
 
-  public onSubmit() {
+  public async onSubmit() {
     const values = this.recipeForm.value;
     if(this.newMode) {
-      this.recipeService.createRecipe(values.name, values.description, values.imagePath, values.ingredients);
+      const newRecipe = await this.recipeService.createRecipe(values.name, values.description, values.imagePath, values.ingredients);
+      this.id = newRecipe.id;
     }
     else if(this.id) {
       this.recipeService.updateRecipe(this.id, values.name, values.description, values.imagePath, values.ingredients);
@@ -60,7 +64,11 @@ export class RecipeEditComponent implements OnInit{
   }
 
   public isControlInvalid(name: string): boolean {
-    var control = this.recipeForm.get(name) as FormControl;
+    const control = this.recipeForm.get(name) as FormControl;
+
+    if(!control)
+      return false;
+
     return control.invalid && control.touched;
   }
 

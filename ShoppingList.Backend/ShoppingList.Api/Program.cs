@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using ShoppingList.Api.Security;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,29 +21,50 @@ builder.Services.AddDbContext<AppDatabaseContext>((provider, options) =>
     options.UseNpgsql(connectionString);
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "Development", policy =>
+var identityServerUrl = builder.Configuration["Apis:Identity"];
+
+ArgumentException.ThrowIfNullOrWhiteSpace(identityServerUrl, "Identity Server URL needs to be set.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        policy
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-        
+        options.Authority = identityServerUrl;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidTypes = ["at+jwt"],
+            ClockSkew = TimeSpan.Zero,
+        };
     });
+
+builder.Services.AddAuthorization(pb =>
+{
+    pb.DefaultPolicy = new AuthorizationPolicyBuilder()        
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .RequireClaim("scope", "ShoppingListAPI.read")
+        .Build();
+
+    pb.AddPolicy(SecurityPolicies.Write, apb => apb
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .RequireClaim("scope", "ShoppingListAPI.read")
+        .RequireClaim("scope", "ShoppingListAPI.write"));
 });
 
 var app = builder.Build();
 
 // Pipeline Configuration
 
-app.MapCarter();
-
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors("Development");
-
     await app.InitialiseDatabaseAsync();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapCarter();
 
 app.Run();

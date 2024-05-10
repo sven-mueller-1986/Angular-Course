@@ -16,6 +16,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
   public recipe?: Recipe;
 
+  public isLoading: boolean = true;
+
   constructor(
     private recipeService: RecipeService,
     private shoppingListService: ShoppingListService,
@@ -26,7 +28,11 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.subscription = this.route.params.subscribe(
       (params: Params) => {
-        this.recipeService.getRecipe(params['id']).then(recipe => this.recipe = recipe);
+        this.isLoading = true;
+        this.recipeService.getRecipe(params['id']).then(recipe =>{
+          this.recipe = recipe;
+          this.isLoading = false;
+        });
       }
     );
   }

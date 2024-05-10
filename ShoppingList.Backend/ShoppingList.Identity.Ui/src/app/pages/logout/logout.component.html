@@ -1,0 +1,24 @@
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <div *ngIf="!isLoading; else loading;" class="w-100 mt-5 row d-flex justify-content-center">
+    <div *ngIf="!error; else errorTemplate;" class="col-12 col-md-6">
+      <h3>You successfully logged out.</h3>
+      <p>You will return in {{ counter }} seconds to the application.</p>
+      <p>Click <a [href]="response?.postLogoutRedirectUri">here</a> to immidiately return to the application.</p>
+      <iframe height="0" width="0" [src]="response?.iFrameUrl"></iframe>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <h3>We are signing you out...</h3>
+  <div class="spinner-border text-primary mt-5" role="status" style="width: 3rem; height: 3rem;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>
+
+<ng-template #errorTemplate>
+  <div class="w-100 d-flex flex-column align-items-center">
+    <h3>Something went wrong.</h3>
+    <p>{{ error?.toString() }}</p>
+  </div>
+</ng-template>

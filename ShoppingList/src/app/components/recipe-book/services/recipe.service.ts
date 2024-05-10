@@ -44,30 +44,23 @@ export class RecipeService {
     return createdRecipe;
   }
 
-  public async updateRecipe(id: string, name: string, description: string, imagePath: string, ingredients: Ingredient[]): Promise<boolean> {
-    return true;
-    // const recipe = new Recipe(
-    //   name,
-    //   description,
-    //   imagePath,
-    //   ingredients
-    // );
+  public async updateRecipe(id: string, name: string, description: string, imagePath: string, ingredients: Ingredient[]): Promise<void> {
+    const recipe = new Recipe(
+      name,
+      description,
+      imagePath,
+      ingredients,
+      id
+    );
 
-    // const createdRecipe = await this.requestService.post<Recipe, Recipe>(Endpoints.Recipe, recipe);
+    await this.requestService.put<Recipe, Recipe>(Endpoints.Recipe, id, recipe);
 
-    // this.recipesChange.next(await this.getRecipes());
-    // return createdRecipe;
+    this.recipesChange.next(await this.getRecipes());
   }
 
-  public deleteRecipe(id: string) {
-    // const existingRecipe = this.recipes.find(r => r.id === id);
+  public async deleteRecipe(id: string) {
+    await this.requestService.delete(Endpoints.Recipe, id);
 
-    // if(!existingRecipe)
-    //   return;
-
-    // const index = this.recipes.indexOf(existingRecipe);
-    // this.recipes.splice(index, 1);
-
-    // this.recipesChange.next(this.recipes);
+    this.recipesChange.next(await this.getRecipes());
   }
 }

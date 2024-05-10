@@ -5,14 +5,20 @@ import { ShoppingListComponent } from './components/shopping/shopping-list/shopp
 import { RecipeStartComponent } from './components/recipe-book/recipe-start/recipe-start.component';
 import { RecipeDetailsComponent } from './components/recipe-book/recipe-details/recipe-details.component';
 import { RecipeEditComponent } from './components/recipe-book/recipe-edit/recipe-edit.component';
+import { AccountComponent } from './components/core/account/account.component';
+import { LandingComponent } from './components/core/landing/landing.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/recipe', pathMatch: 'full' },
-  { path: 'recipe', component: RecipeWrapperComponent, children: [
-    { path: '', component: RecipeStartComponent },
-    { path: 'new', component: RecipeEditComponent },
-    { path: ':id', component: RecipeDetailsComponent },
-    { path: ':id/edit', component: RecipeEditComponent }
+  { path: '', component: LandingComponent },
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
+  { path: 'recipe', component: RecipeWrapperComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: RecipeStartComponent },
+      { path: 'new', component: RecipeEditComponent },
+      { path: ':id', component: RecipeDetailsComponent },
+      { path: ':id/edit', component: RecipeEditComponent }
   ]},
   { path: 'shopping-list', component: ShoppingListComponent },
 ];
