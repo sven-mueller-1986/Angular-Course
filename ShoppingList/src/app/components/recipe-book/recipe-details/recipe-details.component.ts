@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { Recipe } from '../../../models/recipe';
+import { Recipe } from '../../core/models/recipe';
 import { ShoppingListService } from '../../shopping/services/shopping-list.service';
 import { RecipeService } from '../services/recipe.service';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-recipe-details',
@@ -21,6 +22,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private shoppingListService: ShoppingListService,
+    private modal: ModalService,
     private router: Router,
     private route: ActivatedRoute
   ){}
@@ -48,7 +50,10 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
-  public onDeleteClicked() {
+  public async onDeleteClicked() {
+    const confirmation = await this.modal.showDeleteDialogAsync("Do You really want to delete this item?");
+    if(!confirmation) return;
+
     if(this.recipe && this.recipe.id)
       this.recipeService.deleteRecipe(this.recipe.id);
 

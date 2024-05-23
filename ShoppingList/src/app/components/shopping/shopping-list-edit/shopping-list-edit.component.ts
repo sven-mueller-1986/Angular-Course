@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/co
 import { ShoppingListService } from '../services/shopping-list.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Ingredient } from '../../../models/ingredient';
+import { Ingredient } from '../../core/models/ingredient';
 
 @Component({
   selector: 'app-shopping-list-edit',

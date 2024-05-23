@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Recipe } from '../../../models/recipe';
-import { Ingredient } from '../../../models/ingredient';
+import { Recipe } from '../../core/models/recipe';
+import { Ingredient } from '../../core/models/ingredient';
 import { Subject } from 'rxjs';
-import { RequestService } from '../../../services/request.service';
-import { Endpoints } from '../../../constants/endpoints'
+import { RequestService } from '../../core/services/request.service';
+import { Endpoints } from '../../core/constants/endpoints'
 
 @Injectable({
   providedIn: 'root'

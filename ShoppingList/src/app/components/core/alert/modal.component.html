@@ -1,0 +1,9 @@
+<div class="backdrop"></div>
+<div class="alert-box">
+  <p>{{ request?.message }}</p>
+  <div class="alert-box-actions">
+    <button *ngIf="showOk" class="btn" [ngClass]="{'btn-danger': isDelete}" (click)="onSuccess()">OK</button>
+    <button *ngIf="showCancel" class="btn" [ngClass]="{'btn-success': isDelete}" (click)="onCancel()">Cancel</button>
+    <button *ngIf="showClose" class="btn btn-primary" (click)="onClose()">Close</button>
+  </div>
+</div>

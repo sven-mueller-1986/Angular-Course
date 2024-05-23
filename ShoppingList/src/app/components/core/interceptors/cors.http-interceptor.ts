@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../../environments/environment";
 
 // Not needed here, is configured in Backend
 export class CorsHttpInterceptor implements HttpInterceptor {

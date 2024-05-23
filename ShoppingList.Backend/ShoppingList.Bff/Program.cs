@@ -2,6 +2,7 @@ using Carter;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Yarp.ReverseProxy.Transforms;
@@ -101,8 +102,15 @@ app.UseAuthorization();
 app.MapCarter();
 app.MapReverseProxy();
 
-app.UseStaticFiles();
+app.UseEndpoints(_ => { });
+
 app.UseSpaStaticFiles();
-app.UseSpa(config => { });
+app.UseSpa(spa => 
+{
+    if(app.Environment.IsDevelopment())
+    {
+        spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+    }
+});
 
 app.Run();
